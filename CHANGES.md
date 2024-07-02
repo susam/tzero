@@ -14,3 +14,5 @@ Changelog
 - Command `running` to list running timeboxes.
 - Command `time` to display current time.
 - Command `help` to display usage message.
+- Support for tracking timeboxes across multiple channels.
+- Support for tracking timeboxes started over private message.

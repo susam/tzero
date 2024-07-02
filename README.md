@@ -23,3 +23,26 @@ are visible in the other.  There is an instance of Tzero running in
 the IRC channel.  It is connected to the channel with the nickname
 `t0`.  Send the command `,help` to the channel to see `t0` reply with
 a usage help message.
+
+<!--
+- Update version in pyproject.toml.
+
+- Update CHANGES.md.
+
+- Run the following commands:
+
+  make checks
+
+  git add -p
+  git status
+  git commit
+  git push origin main
+
+  make dist test-upload verify-test-upload
+  make dist upload verify-upload
+
+  VER=$(grep version pyproject.toml | cut -d '"' -f2)
+  echo $VER
+  git tag $VER -m "Tzero $VER"
+  git push origin main $VER
+-->

@@ -1,5 +1,5 @@
-NIMB
-====
+Tzero
+=====
 
 Tzero is a simple IRC bot that lets users of IRC channels start and
 manage timeboxes.  Channel users can use the services provided by this

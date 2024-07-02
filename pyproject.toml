@@ -19,20 +19,20 @@ classifiers = [
 ]
 
 [project.urls]
-homepage = "https://github.com/susam/nimb"
+homepage = "https://github.com/susam/tzero"
 
 [project.scripts]
-nimb = "nimb:main"
+tzero = "tzero:main"
 
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 # The presence of etc/ directory prevents setuptools from
-# autodiscovering nimb.py, so we explicitly ask it to include this
+# autodiscovering tzero.py, so we explicitly ask it to include this
 # module.
 [tool.setuptools]
-py-modules = ["nimb"]
+py-modules = ["tzero"]
 
 [tool.ruff.lint]
 select = ["ALL"]

@@ -43,7 +43,7 @@ checks: lint test check-password
 clean:
 	rm -rf *.pyc __pycache__
 	rm -rf .coverage htmlcov
-	rm -rf dist nimb.egg-info
+	rm -rf dist tzero.egg-info
 
 
 # Distribution Targets
@@ -59,6 +59,9 @@ dist: clean
 upload:
 	$(VENV)/bin/twine upload dist/*
 
+test-upload:
+	$(VENV)/bin/twine upload --repository testpypi dist/*
+
 UVENV = ~/.venv/user-tzero
 
 user-venv: FORCE
@@ -69,14 +72,34 @@ verify-upload:
 	$(MAKE) verify-sdist
 	$(MAKE) verify-bdist
 
+verify-test-upload:
+	$(MAKE) verify-test-sdist
+	$(MAKE) verify-test-bdist
+
 verify-sdist: user-venv
-	$(UVENV)/pip3 install --no-binary :all: nimb
-	$(UVENV)/command -v nimb
+	$(UVENV)/pip3 install --no-binary :all: tzero
+	$(UVENV)/command -v tzero
+	ls -l $(UVENV)/bin/tzero
 
 verify-bdist: user-venv
-	$(UVENV)/pip3 install nimb
-	$(UVENV)/command -v nimb
+	$(UVENV)/pip3 install tzero
+	$(UVENV)/command -v tzero
+	ls -l $(UVENV)/bin/tzero
 
+verify-test-sdist: user-venv
+	$(UVENV)/bin/pip3 install \
+	  --index-url https://test.pypi.org/simple/ \
+	  --extra-index-url https://pypi.org/simple \
+	  --no-binary :all: \
+	  --pre tzero
+	ls -l $(UVENV)/bin/tzero
+
+verify-test-bdist: user-venv
+	$(UVENV)/bin/pip3 install \
+	  --index-url https://test.pypi.org/simple/ \
+	  --extra-index-url https://pypi.org/simple \
+	  --pre tzero
+	ls -l $(UVENV)/bin/tzero
 
 # Deployment Targets
 # ------------------

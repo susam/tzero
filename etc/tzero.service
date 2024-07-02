@@ -1,5 +1,5 @@
 [Unit]
-Description=TZERO
+Description=Tzero Timeboxing Manager
 After=network.target
 
 [Service]
