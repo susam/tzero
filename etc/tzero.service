@@ -1,0 +1,13 @@
+[Unit]
+Description=TZERO
+After=network.target
+
+[Service]
+User=tzero
+WorkingDirectory=/opt/tzero
+ExecStart=/usr/bin/python3 tzero.py
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

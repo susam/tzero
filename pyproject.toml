@@ -1,0 +1,44 @@
+[project]
+name = "tzero"
+version = "0.1.0"
+description = "Tzero - IRC timeboxing"
+readme = "etc/PKG-README.md"
+license = {text = "MIT"}
+keywords = ["irc", "matrix", "bridge", "service"]
+authors = [{name = "Susam Pal"}]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "Intended Audience :: System Administrators",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Internet",
+  "Topic :: Utilities"
+]
+
+[project.urls]
+homepage = "https://github.com/susam/nimb"
+
+[project.scripts]
+nimb = "nimb:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+# The presence of etc/ directory prevents setuptools from
+# autodiscovering nimb.py, so we explicitly ask it to include this
+# module.
+[tool.setuptools]
+py-modules = ["nimb"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["COM812", "C901", "PLR0913", "FBT001", ]
+
+# COM812 (missing-trailing-comma)
+# C901 (complex-structure)
+# PLR0913 (too-many-arguments)
+# FBT001 (boolean-type-hint-positional-argument)
