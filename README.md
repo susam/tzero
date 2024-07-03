@@ -45,4 +45,8 @@ a usage help message.
   echo $VER
   git tag $VER -m "Tzero $VER"
   git push origin main $VER
+
+  git remote add cb https://codeberg.org/susam/tzero.git
+  git push cb --all
+  git push cb --tags
 -->

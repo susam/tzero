@@ -77,13 +77,11 @@ verify-test-upload:
 	$(MAKE) verify-test-bdist
 
 verify-sdist: user-venv
-	$(UVENV)/pip3 install --no-binary :all: tzero
-	$(UVENV)/command -v tzero
+	$(UVENV)/bin/pip3 install --no-binary :all: tzero
 	ls -l $(UVENV)/bin/tzero
 
 verify-bdist: user-venv
-	$(UVENV)/pip3 install tzero
-	$(UVENV)/command -v tzero
+	$(UVENV)/bin/pip3 install tzero
 	ls -l $(UVENV)/bin/tzero
 
 verify-test-sdist: user-venv
@@ -100,6 +98,7 @@ verify-test-bdist: user-venv
 	  --extra-index-url https://pypi.org/simple \
 	  --pre tzero
 	ls -l $(UVENV)/bin/tzero
+
 
 # Deployment Targets
 # ------------------
