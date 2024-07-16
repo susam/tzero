@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.2.0 (UNRELEASED)
+-----------------
+
+### Added
+
+- Support for timeboxes started by users from Matrix rooms bridged to
+  IRC channels using [NIMB][].
+
+[NIMB]: https://github.com/susam/nimb
+
+
 0.1.0 (2024-07-02)
 ------------------
 

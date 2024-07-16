@@ -8,6 +8,7 @@ import enum
 import json
 import logging
 import pathlib
+import re
 import select
 import socket
 import ssl
@@ -76,6 +77,7 @@ def main() -> None:
                 config["password"],
                 config["channels"],
                 config["prefix"],
+                config["nimb"],
                 config["block"],
                 config["state"],
             )
@@ -94,6 +96,7 @@ def _run(
     password: str,
     channels: list[str],
     prefix: str,  # e.g., ","
+    nimb_nick: str,
     blocked_words: list[str],
     state_filename: str,
 ) -> None:
@@ -127,10 +130,17 @@ def _run(
                     middle,
                     trailing,
                 )
-                if sender and middle and trailing and trailing.startswith(prefix):
+                if sender and middle and trailing:
                     try:
-                        _process_message(
-                            sock, nick, prefix, blocked_words, sender, middle, trailing
+                        _try_process_message(
+                            sock,
+                            nick,
+                            prefix,
+                            nimb_nick,
+                            blocked_words,
+                            sender,
+                            middle,
+                            trailing,
                         )
                         _Ctx.retry_delay = 1
                     except Exception:  # noqa: BLE001 (blind-except)
@@ -143,10 +153,11 @@ def _run(
             _LOG.exception("Task processor encountered error")
 
 
-def _process_message(
+def _try_process_message(
     sock: socket.socket,
     nick: str,
     prefix: str,  # e.g., ","
+    nimb_nick: str,
     blocked_words: list[str],
     sender: str,
     recipient: str,
@@ -157,6 +168,46 @@ def _process_message(
     # this tool.
     private = nick == recipient
 
+    # Has the message arrived from NIMB IRC Matrix Bridge?
+    nimb = len(nimb_nick) > 0 and sender == nimb_nick
+
+    # Messages from NIMB must always arrive publicly in a channel.  It
+    # is impossible for a NIMB message to arrive in private.  However,
+    # if such a condition ever arises, it would either indicate a bug
+    # or an unanticipated issue.
+    if private and nimb:
+        _LOG.error("Ignoring private message from NIMB")
+        return
+
+    if nimb:
+        matches = re.search(r"^<.+ \((.+)\)> (.*)", message)
+        if matches is None:
+            _LOG.error("Ignoring malformed message from NIMB")
+            return
+        sender = matches.group(1)
+        message = matches.group(2)
+
+    if message.startswith(prefix):
+        _process_message(
+            sock,
+            prefix,
+            blocked_words,
+            sender,
+            recipient,
+            private,
+            message,
+        )
+
+
+def _process_message(
+    sock: socket.socket,
+    prefix: str,  # e.g., ","
+    blocked_words: list[str],
+    sender: str,
+    recipient: str,
+    private: bool,
+    message: str,
+) -> None:
     # While replying to private messages, the response should be sent
     # to the sender.  While replying to channel messages, the response
     # should be sent to the channel (recipient).
