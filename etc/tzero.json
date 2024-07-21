@@ -1,0 +1,16 @@
+{
+  "host": "irc.libera.chat",
+  "port": 6697,
+  "tls": true,
+  "nick": "...",
+  "password": "...",
+  "channels": ["#t0"],
+  "state": "/tmp/tzero.json",
+  "prefix": ",",
+  "nimb": "",
+  "block": [
+    "xxx",
+    "yyy",
+    "zzz"
+  ]
+}
