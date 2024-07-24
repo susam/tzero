@@ -14,8 +14,8 @@ their timeboxes while they block off some time for productive work.
 
 To see Tzero in action, join either of the two channels:
 
-- [#tzero:libera.chat](https://web.libera.chat/#tzero)
-- [#tzero:matrix.org](https://app.element.io/#/room/#tzero:matrix.org)
+- [#bitwise:libera.chat](https://web.libera.chat/#bitwise)
+- [#bitwise:matrix.org](https://app.element.io/#/room/#bitwise:matrix.org)
 
 The first one is an IRC channel and the second one is a Matrix room.
 Both channels are bridged together, so messages posted to one channel
@@ -29,6 +29,10 @@ Contents
 --------
 
 * [Get Started](#get-started)
+* [Configuration](#configuration)
+* [NIMB Support](#nimb-support)
+* [License](#license)
+* [Support](#support)
 
 
 Get Started
