@@ -9,6 +9,10 @@ Changelog
 - Support for timeboxes started by users from Matrix rooms bridged to
   IRC channels using [NIMB][].
 
+### Changed
+
+- Show abbreviated weekday in start times of timeboxes.
+
 [NIMB]: https://github.com/susam/nimb
 
 

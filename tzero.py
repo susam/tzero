@@ -620,7 +620,7 @@ def _format_timebox(person: str, timebox: dict[str, Any]) -> str:
     start = timebox["start"]
     duration = timebox["duration"]
     summary = timebox["summary"]
-    start_str = time.strftime("%H:%M %Z", time.gmtime(start))
+    start_str = time.strftime("%a %H:%M %Z", time.gmtime(start))
     return f"{person} [{start_str}] ({duration} min) {summary}"
 
 
