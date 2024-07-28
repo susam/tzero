@@ -30,7 +30,11 @@ _MAX_KEEP_DURATION = 60 if _DEV_MODE else 2 * 86400
 
 class _Ctx:
     retry_delay: ClassVar[int] = 1
-    state: ClassVar[dict[str, Any]] = {"timebox": {}}
+    state: ClassVar[dict[str, Any]] = {
+        "count": 0,
+        "minutes": 0,
+        "timebox": {},
+    }
     commands: ClassVar[list[str]] = [
         "begin",
         "cancel",
@@ -38,6 +42,7 @@ class _Ctx:
         "list",
         "mine",
         "running",
+        "summary",
         "time",
         "help",
     ]
@@ -492,6 +497,35 @@ def _running_help(prefix: str, command: str) -> list[str]:
     return [f"Usage: {prefix}{command}.  List all running timeboxes of the channel."]
 
 
+# Command summary.
+def _summary_command(
+    prefix: str,
+    _person: str,
+    command: str,
+    params: list[str],
+    _audience: str,
+    _private: bool,
+) -> list[str]:
+    if len(params) > 0:
+        return ["Error: " + _running_help(prefix, command)[0]]
+
+    count = _Ctx.state["count"]
+    minutes = _Ctx.state["minutes"]
+    average = round(minutes / count)
+
+    return [
+        f"I have run {count} across all channels, totalling {minutes} minutes.  "
+        f"The average length of each timebox is {average} minutes."
+    ]
+
+
+def _summary_help(prefix: str, command: str) -> list[str]:
+    return [
+        f"Usage: {prefix}{command}.  "
+        "Print a summary of all timebox operations across all channels."
+    ]
+
+
 # Command time
 def _time_command(
     prefix: str,
@@ -565,6 +599,8 @@ def _complete_timeboxes(sock: socket.socket) -> None:
             ):
                 last["state"] = _TState.COMPLETED
                 msg = f"Completed timebox in {audkey}: {_format_timebox(person, last)}"
+                _Ctx.state["count"] += 1
+                _Ctx.state["minutes"] += last["duration"]
                 _send_message(sock, last["audience"], msg)
 
 
