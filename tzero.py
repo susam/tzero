@@ -389,7 +389,7 @@ def _delete_help(prefix: str, command: str) -> list[str]:
 
 def _list_command(
     prefix: str,
-    person: str,
+    _person: str,
     command: str,
     params: list[str],
     audience: str,
@@ -420,7 +420,7 @@ def _list_help(prefix: str, command: str) -> list[str]:
     return [
         f"Usage: {prefix}{command}.  List completed timeboxes in current channel.  "
         f"Only most recent {_MAX_KEEP_TIMEBOXES} timeboxes started "
-        f"within the last {_MAX_KEEP_DURATION} hours are listed.  "
+        f"within the last {_format_duration(_MAX_KEEP_DURATION)} are listed."
     ]
 
 
@@ -455,7 +455,7 @@ def _mine_help(prefix: str, command: str) -> list[str]:
     return [
         f"Usage: {prefix}{command}.  List your completed timeboxes.  "
         f"Only your most recent {_MAX_KEEP_TIMEBOXES} timeboxes started "
-        f"within the last {_MAX_KEEP_DURATION} hours are available.  "
+        f"within the last {_format_duration(_MAX_KEEP_DURATION)} are available.  "
         "Older timeboxes are permanently removed from the system."
     ]
 
@@ -463,7 +463,7 @@ def _mine_help(prefix: str, command: str) -> list[str]:
 # Command running.
 def _running_command(
     prefix: str,
-    person: str,
+    _person: str,
     command: str,
     params: list[str],
     audience: str,
@@ -622,6 +622,29 @@ def _format_timebox(person: str, timebox: dict[str, Any]) -> str:
     summary = timebox["summary"]
     start_str = time.strftime("%a %H:%M %Z", time.gmtime(start))
     return f"{person} [{start_str}] ({duration} min) {summary}"
+
+
+def _format_unit(number: int, unit: str) -> str:
+    if number == 0:
+        return ""
+    if number == 1:
+        return f"{number} {unit} "
+    return f"{number} {unit}s "
+
+
+def _format_duration(seconds: int) -> str:
+    days = seconds // 86400
+    seconds %= 86400
+    hours = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+    return (
+        _format_unit(days, "day")
+        + _format_unit(hours, "hour")
+        + _format_unit(minutes, "minute")
+        + _format_unit(seconds, "second")
+    ).rstrip()
 
 
 # Protocol functions

@@ -153,7 +153,7 @@ a new issue at <http://github.com/susam/tzero/issues>.
   git add -p
   git status
   git commit
-  git push origin main
+  git push -u origin main
 
   make dist test-upload verify-test-upload
   make dist upload verify-upload
