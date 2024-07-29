@@ -514,7 +514,8 @@ def _summary_command(
     average = round(minutes / count)
 
     return [
-        f"I have run {count} across all channels, totalling {minutes} minutes.  "
+        f"I have run {count} timeboxes across all channels, "
+        f"totalling {minutes} minutes.  "
         f"The average length of each timebox is {average} minutes."
     ]
 

@@ -15,8 +15,6 @@ Changelog
 
 - Show abbreviated weekday in start times of timeboxes.
 
-[NIMB]: https://github.com/susam/nimb
-
 
 0.1.0 (2024-07-02)
 ------------------
@@ -33,3 +31,6 @@ Changelog
 - Command `help` to display usage message.
 - Support for tracking timeboxes across multiple channels.
 - Support for tracking timeboxes started over private message.
+
+
+[NIMB]: https://github.com/susam/nimb
