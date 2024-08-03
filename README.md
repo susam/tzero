@@ -32,9 +32,8 @@ Contents
 --------
 
 * [Try It Now](#try-it-now)
-* [Get Started](#get-started)
-* [Features](#features)
 * [Example Session](#example-session)
+* [Features](#features)
 * [Commands](#commands)
   * [begin](#begin)
   * [cancel](#cancel)
@@ -46,10 +45,13 @@ Contents
   * [time](#time)
   * [help](#help)
   * [version](#version)
+* [Setup](#setup)
 * [Configuration](#configuration)
 * [NIMB Support](#nimb-support)
 * [License](#license)
 * [Support](#support)
+* [Channels](#channels)
+* [More](#more)
 
 
 Try It Now
@@ -68,38 +70,23 @@ the IRC channel.  It is connected to the channel with the nickname
 a usage help message.
 
 
-Get Started
------------
+Example Session
+---------------
 
-Perform the following steps to get started with Tzero.
-
- 1. Clone this repository.  For example,
-
-    ```sh
-    git clone https://github.org/susam/tzero.git
-    ```
-
- 2. Create configuration file:
-
-    ```sh
-    cd tzero
-    cp etc/tzero.json tzero.json
-    ```
-
-    Then edit the new configuration file named `tzero.json` to include
-    connection details for the IRC nick that should be used to connect
-    to an IRC network.  Some example values are already populated in
-    this file to help you get started.
-
- 3. Run Tzero:
-
-    ```sh
-    python3 tzero.py
-    ```
-
-Note that Tzero does not depend on any external Python library or
-package.  It only depends on a recent version of Python 3 and its
-standard library.
+```
+20:07 <susam> ,begin Read "Galois Theory" by Stewart (2015)
+20:07 <t0> Started timebox in #bitwise: susam [Sun 20:07 GMT] (30 min) Read "Galois Theory" by Stewart (2015)
+20:37 <t0> Completed timebox in #bitwise: susam [Sun 20:07 GMT] (30 min) Read "Galois Theory" by Stewart (2015)
+20:39 <susam> ,list
+20:39 <t0> Completed timeboxes in #bitwise:
+20:39 <t0> susam [Sun 20:07 GMT] (30 min) Read "Galois Theory" by Stewart (2015)
+20:39 <t0> susam [Sun 19:27 GMT] (30 min) Read "Introduction to Analytic Number Theory" by Apostol (1976)
+20:39 <t0> gigo [Sun 18:51 GMT] (30 min) Add Vertico to my Emacs setup
+20:39 <t0> gigo [Sun 16:09 GMT] (30 min) Read <https://go.dev/tour/concurrency/1>
+20:39 <t0> drwiz [Sun 16:09 GMT] (30 min) Solve the N Queens Problem in C++
+20:40 <susam> ,summary
+20:40 <t0> I have run 15 timeboxes across all channels, totalling 900 minutes.  The average length of each timebox is 30 minutes.
+```
 
 
 Features
@@ -138,25 +125,6 @@ Features
   can run a maximum of only one timebox at a time.  However, the same
   user can run multiple timeboxes simultaneously as long as they are
   in different channels.
-
-
-Example Session
----------------
-
-```
-20:07 <susam> ,begin Read "Galois Theory" by Stewart (2015)
-20:07 <t0> Started timebox in #bitwise: susam [Sun 20:07 GMT] (30 min) Read "Galois Theory" by Stewart (2015)
-20:37 <t0> Completed timebox in #bitwise: susam [Sun 20:07 GMT] (30 min) Read "Galois Theory" by Stewart (2015)
-20:39 <susam> ,list
-20:39 <t0> Completed timeboxes in #bitwise:
-20:39 <t0> susam [Sun 20:07 GMT] (30 min) Read "Galois Theory" by Stewart (2015)
-20:39 <t0> susam [Sun 19:27 GMT] (30 min) Read "Introduction to Analytic Number Theory" by Apostol (1976)
-20:39 <t0> gigo [Sun 18:51 GMT] (30 min) Add Vertico to my Emacs setup
-20:39 <t0> gigo [Sun 16:09 GMT] (30 min) Read <https://go.dev/tour/concurrency/1>
-20:39 <t0> drwiz [Sun 16:09 GMT] (30 min) Solve the N Queens Problem in C++
-20:40 <susam> ,summary
-20:40 <t0> I have run 15 timeboxes across all channels, totalling 900 minutes.  The average length of each timebox is 30 minutes.
-```
 
 
 Commands
@@ -303,6 +271,40 @@ Usage: `version`
 Show version, copyright, and license details.
 
 
+Setup
+-----
+
+Perform the following steps to set up Tzero for your IRC channels:
+
+ 1. Clone this repository.  For example,
+
+    ```sh
+    git clone https://github.org/susam/tzero.git
+    ```
+
+ 2. Create configuration file:
+
+    ```sh
+    cd tzero
+    cp etc/tzero.json tzero.json
+    ```
+
+    Then edit the new configuration file named `tzero.json` to include
+    connection details for the IRC nick that should be used to connect
+    to an IRC network.  Some example values are already populated in
+    this file to help you get started.
+
+ 3. Run Tzero:
+
+    ```sh
+    python3 tzero.py
+    ```
+
+Note that Tzero does not depend on any external Python library or
+package.  It only depends on a recent version of Python 3 and its
+standard library.
+
+
 Configuration
 -------------
 
@@ -373,6 +375,35 @@ Support
 
 To report bugs, suggest improvements, or ask questions, please create
 a new issue at <http://github.com/susam/tzero/issues>.
+
+
+Channels
+--------
+
+The author of this project hangs out at the following places online:
+
+- Website: [susam.net](https://susam.net)
+- Mastodon: [@susam@mastodon.social](https://mastodon.social/@susam)
+- GitHub: [@susam](https://github.com/susam)
+- Matrix: [#susam:matrix.org](https://app.element.io/#/room/#susam:matrix.org)
+- IRC: [#susam:libera.chat](https://web.libera.chat/#susam)
+
+You are welcome to subscribe to, follow, or join one or more of the
+above channels to receive updates from the author or ask questions
+about this project.
+
+
+More
+----
+
+See [NIMB](https://github.com/susam/nimb), a relay bridge to forward
+messages between IRC channels and Matrix rooms.
+
+See [Clog](https://github.com/susam/clog), an extremely simple IRC
+chat logger.
+
+See [Timebox](https://github.com/susam/timebox) for timeboxing scripts
+for Unix/Linux/macOS/Windows.
 
 
 <!--
