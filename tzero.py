@@ -16,6 +16,7 @@ import time
 from typing import Any, ClassVar, Iterator
 
 _NAME = "tzero"
+_VER = "0.2.0-dev20240803"
 _LOG = logging.getLogger(_NAME)
 _DEV_MODE = False
 
@@ -45,6 +46,7 @@ class _Ctx:
         "summary",
         "time",
         "help",
+        "version",
     ]
 
 
@@ -526,7 +528,7 @@ def _summary_command(
 def _summary_help(prefix: str, command: str) -> list[str]:
     return [
         f"Usage: {prefix}{command}.  "
-        "Print a summary of all timebox operations across all channels."
+        "Show a summary of all timeboxes completed across all channels."
     ]
 
 
@@ -586,6 +588,30 @@ def _help_help(prefix: str, command: str) -> list[str]:
         + _command_list(prefix, _Ctx.commands)
         + "."
     ]
+
+
+# Command help
+def _version_command(
+    prefix: str,
+    _person: str,
+    command: str,
+    params: list[str],
+    _audience: str,
+    _private: bool,
+) -> list[str]:
+    if len(params) > 0:
+        return ["Error: " + _time_help(prefix, command)[0]]
+    return [
+        f"{_NAME.capitalize()} {_VER}.  "
+        "Copyright (c) 2024 Susam Pal.  "
+        "This is free and open source software available under the terms of "
+        "the MIT license.  You can obtain a copy of the license at "
+        "<https://susam.github.io/license/mit.html>."
+    ]
+
+
+def _version_help(prefix: str, command: str) -> list[str]:
+    return [f"Usage: {prefix}{command}.  Show version, copyright, and license details."]
 
 
 # Tasks.

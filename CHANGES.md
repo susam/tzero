@@ -8,8 +8,9 @@ Changelog
 
 - Support for timeboxes started by users from Matrix rooms bridged to
   IRC channels using [NIMB][].
-- Command `summary` to display a summary of all timeboxes run across
-  all channels.
+- Command `summary` to display summary of timeboxes run across all channels.
+- Command `version` to display version, copyright, and license details.
+
 
 ### Changed
 
