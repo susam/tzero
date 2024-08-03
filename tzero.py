@@ -16,7 +16,7 @@ import time
 from typing import Any, ClassVar, Iterator
 
 _NAME = "tzero"
-_VER = "0.2.0-dev20240803"
+_VER = "0.2.0"
 _LOG = logging.getLogger(_NAME)
 _DEV_MODE = False
 

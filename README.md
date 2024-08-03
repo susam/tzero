@@ -367,7 +367,7 @@ a new issue at <http://github.com/susam/tzero/issues>.
 
 
 <!--
-- Update version in pyproject.toml.
+- Update version in pyproject.toml and tzero.py.
 
 - Update CHANGES.md.
 
