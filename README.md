@@ -12,26 +12,18 @@ be completed.  A time box is a fixed period of time alloted for a task
 or activity.  This tool lets users of an IRC channel start and manage
 their timeboxes while they block off some time for productive work.
 
-There is a time management technique known as the [Pomodoro Technique]
-which is closely related to the timeboxing technique.  The Pomodoro
-Technique prescribes specific guidelines like 25 minute timeboxes, 5
-minute break after each timebox, a longer break after every 4
-timeboxes, etc.  This tool, however, supports timeboxing in general
-without any specific guidelines.  But if you wish to practice the
-Pomodoro Technique with this tool, it is definitely possible to do so
-since this tool is, after all, a simple timer bot for IRC.
+There is a very popular time management technique known as the
+[Pomodoro Technique] which is closely related to the timeboxing
+technique.  The Pomodoro Technique prescribes specific guidelines like
+25 minute timeboxes, 5 minute break after each timebox, a longer break
+after every 4 timeboxes, etc.  This tool, however, supports timeboxing
+in general without any specific guidelines.  But if you wish to
+practice the Pomodoro Technique with this tool, it is definitely
+possible to do so since this tool is, after all, a simple timer bot
+for IRC.
 
-To see Tzero in action, join either of the two channels:
-
-- [#bitwise:libera.chat](https://web.libera.chat/#bitwise)
-- [#bitwise:matrix.org](https://app.element.io/#/room/#bitwise:matrix.org)
-
-The first one is an IRC channel and the second one is a Matrix room.
-Both channels are bridged together, so messages posted to one channel
-are visible in the other.  There is an instance of Tzero running in
-the IRC channel.  It is connected to the channel with the nickname
-`t0`.  Send the command `,help` to the channel to see `t0` reply with
-a usage help message.
+To try Tzero right now, head over to the [Try It Now](#try-it-now)
+section.
 
 [Pomodoro Technique]: https://en.wikipedia.org/wiki/Pomodoro_Technique
 
@@ -39,6 +31,7 @@ a usage help message.
 Contents
 --------
 
+* [Try It Now](#try-it-now)
 * [Get Started](#get-started)
 * [Features](#features)
 * [Example Session](#example-session)
@@ -57,6 +50,22 @@ Contents
 * [NIMB Support](#nimb-support)
 * [License](#license)
 * [Support](#support)
+
+
+Try It Now
+----------
+
+To see Tzero in action, join either of the two channels:
+
+- [#bitwise:libera.chat](https://web.libera.chat/#bitwise)
+- [#bitwise:matrix.org](https://app.element.io/#/room/#bitwise:matrix.org)
+
+The first one is an IRC channel and the second one is a Matrix room.
+Both channels are bridged together, so messages posted to one channel
+are visible in the other.  There is an instance of Tzero running in
+the IRC channel.  It is connected to the channel with the nickname
+`t0`.  Send the command `,help` to the channel to see `t0` reply with
+a usage help message.
 
 
 Get Started
@@ -144,7 +153,7 @@ Example Session
 20:39 <t0> susam [Sun 19:27 GMT] (30 min) Read "Introduction to Analytic Number Theory" by Apostol (1976)
 20:39 <t0> gigo [Sun 18:51 GMT] (30 min) Add Vertico to my Emacs setup
 20:39 <t0> gigo [Sun 16:09 GMT] (30 min) Read <https://go.dev/tour/concurrency/1>
-20:39 <t0> drwiz [Sun 16:09 GMT] (30 min) Solve the N Queens Problem in C++.
+20:39 <t0> drwiz [Sun 16:09 GMT] (30 min) Solve the N Queens Problem in C++
 20:40 <susam> ,summary
 20:40 <t0> I have run 15 timeboxes across all channels, totalling 900 minutes.  The average length of each timebox is 30 minutes.
 ```
