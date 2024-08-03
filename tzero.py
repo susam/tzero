@@ -176,6 +176,9 @@ def _try_process_message(
     # Has the message arrived from NIMB IRC Matrix Bridge?
     nimb = len(nimb_nick) > 0 and sender == nimb_nick
 
+    # Sanitise message.
+    message = message.translate(str.maketrans("\0\r\n", "   "))
+
     # Messages from NIMB must always arrive publicly in a channel.  It
     # is impossible for a NIMB message to arrive in private.  However,
     # if such a condition ever arises, it would either indicate a bug
