@@ -59,15 +59,25 @@ Try It Now
 
 To see Tzero in action, join either of the two channels:
 
-- [#bitwise:libera.chat](https://web.libera.chat/#bitwise)
-- [#bitwise:matrix.org](https://app.element.io/#/room/#bitwise:matrix.org)
+- Libera chat: [#bitwise](https://web.libera.chat/#bitwise)
+- Matrix bridge: [#bitwise:matrix.org](https://app.element.io/#/room/#bitwise:matrix.org)
 
-The first one is an IRC channel and the second one is a Matrix room.
-Both channels are bridged together, so messages posted to one channel
-are visible in the other.  There is an instance of Tzero running in
-the IRC channel.  It is connected to the channel with the nickname
-`t0`.  Send the command `,help` to the channel to see `t0` reply with
-a usage help message.
+You need to join only one of these links, not both.  Messages posted
+to the IRC channel are automatically forwarded to the Matrix room and
+vice versa.
+
+If you are not an active IRC user, prefer joining the Matrix bridge
+because it is more convenient for someone unfamiliar with IRC.  For
+example, you can close your web browser or client and your Matrix chat
+session will still stay alive on the server.  You can connect back
+later and read messages that were sent to the room while you were
+away. Doing that with IRC requires slightly more work such as setting
+up IRC bouncers etc.
+
+After connecting to the above IRC channel (or the Matrix room), send
+the message `,help` to the channel.  An instance of Tzero is connected
+to the channel with the nickname `t0` and it will respond to your
+message as soon as it reads it.
 
 
 Example Session
