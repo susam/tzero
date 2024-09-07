@@ -6,6 +6,10 @@
   "password": "...",
   "channels": ["#t0"],
   "state": "/tmp/tzero.json",
+  "keep_timeboxes": 10,
+  "keep_duration": 172800,
+  "max_print_channel": 5,
+  "max_print_private": 10,
   "prefix": ",",
   "nimb": "",
   "block": [

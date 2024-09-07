@@ -16,20 +16,17 @@ import time
 from typing import Any, ClassVar, Iterator
 
 _NAME = "tzero"
-_VER = "0.2.0"
+_VER = "0.3.0.dev1"
 _LOG = logging.getLogger(_NAME)
-_DEV_MODE = False
 
 _DEFAULT_DURATION = 30
 _MIN_DURATION = 15
 _MAX_DURATION = 60
 _DURATION_MULTIPLE = 5
 
-_MAX_KEEP_TIMEBOXES = 3 if _DEV_MODE else 10
-_MAX_KEEP_DURATION = 60 if _DEV_MODE else 2 * 86400
-
 
 class _Ctx:
+    dev_mode: bool = False
     retry_delay: ClassVar[int] = 1
     state: ClassVar[dict[str, Any]] = {
         "count": 0,
@@ -48,6 +45,10 @@ class _Ctx:
         "help",
         "version",
     ]
+    keep_timeboxes: int = 0
+    keep_duration: int = 0
+    max_print_channel: int = 0
+    max_print_private: int = 0
 
 
 class _TState(enum.StrEnum):
@@ -61,12 +62,19 @@ def main() -> None:
         "%(asctime)s %(levelname)s %(filename)s:%(lineno)d "
         "%(funcName)s() %(message)s"
     )
-    log_level = logging.DEBUG if _DEV_MODE else logging.INFO
+    log_level = logging.DEBUG if _Ctx.dev_mode else logging.INFO
     logging.basicConfig(format=log_fmt, level=log_level)
 
     # Read configuration.
     with pathlib.Path(f"{_NAME}.json").open() as stream:
         config = json.load(stream)
+
+    # Update context.
+    _Ctx.dev_mode = config.get("dev_mode", False)
+    _Ctx.keep_timeboxes = config["keep_timeboxes"]
+    _Ctx.keep_duration = config["keep_duration"]
+    _Ctx.max_print_channel = config["max_print_channel"]
+    _Ctx.max_print_private = config["max_print_private"]
 
     # Ensure we can write to state file.
     _read_state(config["state"])
@@ -421,16 +429,19 @@ def _list_command(
         return [f"No completed timeboxes found in {audkey}."]
 
     completed.sort(key=lambda x: x[1]["start"], reverse=True)
+    max_print = _Ctx.max_print_private if private else _Ctx.max_print_channel
     return [f"Completed timeboxes in {audkey}:"] + [
-        _format_timebox(person, t) for person, t in completed
+        _format_timebox(person, t) for person, t in completed[:max_print]
     ]
 
 
 def _list_help(prefix: str, command: str) -> list[str]:
     return [
         f"Usage: {prefix}{command}.  List completed timeboxes in current channel.  "
-        f"Only most recent {_MAX_KEEP_TIMEBOXES} timeboxes started "
-        f"within the last {_format_duration(_MAX_KEEP_DURATION)} are listed."
+        f"Only most recent {_Ctx.keep_timeboxes} timeboxes started "
+        f"within the last {_format_duration(_Ctx.keep_duration)} are available.  "
+        f"A maximum of {_Ctx.max_print_channel} timeboxes are listed in channel.  "
+        f"A maximum of {_Ctx.max_print_private} timeboxes are listed in private."
     ]
 
 
@@ -456,17 +467,19 @@ def _mine_command(
         return [f"No completed timeboxes found for {person} in {audkey}."]
 
     completed.sort(key=lambda x: x["start"], reverse=True)
+    max_print = _Ctx.max_print_private if private else _Ctx.max_print_channel
     return [f"Completed timeboxes of {person} in {audkey}:"] + [
-        _format_timebox(person, t) for t in completed
+        _format_timebox(person, t) for t in completed[:max_print]
     ]
 
 
 def _mine_help(prefix: str, command: str) -> list[str]:
     return [
         f"Usage: {prefix}{command}.  List your completed timeboxes.  "
-        f"Only your most recent {_MAX_KEEP_TIMEBOXES} timeboxes started "
-        f"within the last {_format_duration(_MAX_KEEP_DURATION)} are available.  "
-        "Older timeboxes are permanently removed from the system."
+        f"Only your most recent {_Ctx.keep_timeboxes} timeboxes started "
+        f"within the last {_format_duration(_Ctx.keep_duration)} are available.  "
+        f"A maximum of {_Ctx.max_print_channel} timeboxes are listed in channel.  "
+        f"A maximum of {_Ctx.max_print_private} timeboxes are listed in private."
     ]
 
 
@@ -617,7 +630,7 @@ def _version_help(prefix: str, command: str) -> list[str]:
 # Tasks.
 def _complete_timeboxes(sock: socket.socket) -> None:
     current_time = int(time.time())
-    multiplier = 1 if _DEV_MODE else 60
+    multiplier = 1 if _Ctx.dev_mode else 60
     for audkey, persons in _Ctx.state["timebox"].items():
         for person, timeboxes in persons.items():
             if len(timeboxes) == 0:
@@ -642,9 +655,9 @@ def _clean_state() -> None:
             cleaned_timeboxes = [
                 timebox
                 for timebox in timeboxes
-                if current_time <= timebox["start"] + _MAX_KEEP_DURATION
+                if current_time <= timebox["start"] + _Ctx.keep_duration
             ]
-            cleaned_timeboxes = cleaned_timeboxes[-_MAX_KEEP_TIMEBOXES:]
+            cleaned_timeboxes = cleaned_timeboxes[-_Ctx.keep_timeboxes :]
             if len(cleaned_timeboxes) > 0:
                 if audkey not in cleaned_timebox_state:
                     cleaned_timebox_state[audkey] = {}

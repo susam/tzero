@@ -8,9 +8,10 @@ channel may send bot commands like `,begin`, `,list`, `,mine`,
 
 Timeboxing is a time management technique that is believed to boost
 productivity by limiting the time during which a task is supposed to
-be completed.  A time box is a fixed period of time alloted for a task
+be completed.  A timebox is a fixed period of time alloted for a task
 or activity.  This tool lets users of an IRC channel start and manage
-their timeboxes while they block off some time for productive work.
+their timeboxes while they block off some focus time for productive
+work.
 
 There is a very popular time management technique known as the
 [Pomodoro Technique] which is closely related to the timeboxing
@@ -92,7 +93,7 @@ Example Session
 20:39 <t0> susam [Sun 20:07 GMT] (30 min) Read "Galois Theory" by Stewart (2015)
 20:39 <t0> susam [Sun 19:27 GMT] (30 min) Read "Introduction to Analytic Number Theory" by Apostol (1976)
 20:39 <t0> gigo [Sun 18:51 GMT] (30 min) Add Vertico to my Emacs setup
-20:39 <t0> gigo [Sun 16:09 GMT] (30 min) Read <https://go.dev/tour/concurrency/1>
+20:39 <t0> gigo [Sun 16:09 GMT] (30 min) Read https://go.dev/tour/concurrency/1
 20:39 <t0> drwiz [Sun 16:09 GMT] (30 min) Solve the N Queens Problem in C++
 20:40 <susam> ,summary
 20:40 <t0> I have run 15 timeboxes across all channels, totalling 900 minutes.  The average length of each timebox is 30 minutes.
@@ -118,8 +119,8 @@ Features
 
 * Private timeboxing: Users can run timeboxes privately by sending
   private messages to Tzero with `/msg` or `/query` commands.  A
-  private message session is also treated like a virtual private
-  channel, so it too benefits from the channel isolation feature.
+  private message session is treated like a virtual private channel,
+  so it too benefits from the channel isolation feature.
 
 * Persistent state: Data pertaining to running and completed timeboxes
   are saved to a configurable state file.  As a result, if the tool
@@ -127,9 +128,10 @@ Features
   nothing happened, after it restarts.
 
 * Limited retention: Within each channel or private message session,
-  only the most recent 10 timeboxes started in the last 48 hours are
-  kept in the state file.  Older timeboxes are permanently deleted.
-  Therefore there is no way to list such older timeboxes.
+  only a certain number of most recent timeboxes started within a
+  certain amount of time are kept in the state file.  Older timeboxes
+  are permanently deleted from the state.  Both the number of recent
+  timeboxes to keep and the retention duration are configurable.
 
 * One timebox per user per channel at a time: Within a channel, a user
   can run a maximum of only one timebox at a time.  However, the same
@@ -140,15 +142,15 @@ Features
 Commands
 --------
 
-As can be seen in the previous section, Tzero supports several
-commands like `begin`, `list`, `summary`, etc.  Commands must begin
-with a prefix string.  In the example presented in the previous
-section, the prefix string is `,` (the comma).  The prefix string
-needs to be configured in the configuration file.  See section
-[Configuration](#configuration) for more details.
+Tzero supports several commands like `begin`, `list`, `summary`, etc.
+Commands must begin with a prefix string.  In the example presented in
+section [Example Session](#example-session), the prefix string is `,`
+(the comma).  The prefix string needs to be configured in the
+configuration file.  See section [Configuration](#configuration) for
+more details.
 
 A command name may be truncated to any positive length.  For example,
-the `begin` command be written as `b`, `be`, `beg`, etc. too.
+the `begin` command may be written as `b`, `be`, `beg`, or `begi` too.
 
 The following sections present the complete list of commands supported
 by Tzero.
@@ -199,8 +201,7 @@ timebox that you ran in the private message session.
 
 Usage: `list`
 
-List completed timeboxes in current channel.  Only most recent 10
-timeboxes started within the last 2 days are listed.
+List completed timeboxes in current channel.
 
 In a private message session, this command lists your completed
 timeboxes that you ran in a private message session.
@@ -210,9 +211,7 @@ timeboxes that you ran in a private message session.
 
 Usage: `mine`
 
-List only your completed timeboxes in the current channel.  Only your
-most recent 10 timeboxes started within the last 2 days are available.
-Older timeboxes are permanently removed from the system.
+List only your completed timeboxes in the current channel.
 
 In a private message session, this command lists your completed
 timeboxes that you ran in a private message session.  Note that in a
@@ -325,24 +324,48 @@ configuration field in this file:
 
 - `host` (type `string`): Hostname to be used to connect to the IRC
   network.
+
 - `port` (type `number`): TCP port number to be used to connect to the
   IRC network.
+
 - `tls` (type `boolean`): Whether to use TLS to connect to the IRC
   network.
+
 - `nick` (type `string`): Nickname to assume while connecting to the
   IRC network.
+
 - `password` (type `string`): Password to use while connecting to IRC
   network.
+
 - `channels` (type `array` of `string`): A list of IRC channels to
   connect to.
+
 - `state` (type `str`): Path of a file where Tzero should save its
   state to.
+
+- `keep_timeboxes` (type `number`): Maximum number of recent timeboxes
+  per user per channel to retain in state.  Older timeboxes are
+  permanently deleted from the state.
+
+- `keep_duration` (type `number`): Maximum duration for which recent
+  timeboxes are retained in state.  Older timeboxes are permanently
+  deleted from the state.
+
+- `max_print_channel` (type `number`): Maximum number of timeboxes to
+  be listed in a channel in response to `list` or `mine` commands.
+
+- `max_print_private` (type `number`): Maximum number of timeboxes to
+  be listed in private message in response to `list` or `mine`
+  commands.
+
 - `prefix` (type `str`): A prefix string that begins all Tzero
   commands.
+
 - `nimb` (type `str`): Nickname of any [NIMB][] client that is present
   in the channel.  If no NIMB client is present, set this to an empty
   string.  See section [NIMB Support](#nimb-support) below for more
   details about this.
+
 - `block` (type `array` of `string`): A list of strings to be blocked.
   If an IRC user sends a Tzero command that contains any string
   mentioned in this list, then Tzero rejects that command.
