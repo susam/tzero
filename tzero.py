@@ -16,13 +16,8 @@ import time
 from typing import Any, ClassVar, Iterator
 
 _NAME = "tzero"
-_VER = "0.3.0.dev1"
+_VER = "0.3.0.dev2"
 _LOG = logging.getLogger(_NAME)
-
-_DEFAULT_DURATION = 30
-_MIN_DURATION = 15
-_MAX_DURATION = 60
-_DURATION_MULTIPLE = 5
 
 
 class _Ctx:
@@ -46,9 +41,13 @@ class _Ctx:
         "version",
     ]
     keep_timeboxes: int = 0
-    keep_duration: int = 0
+    keep_duration_seconds: int = 0
     max_print_channel: int = 0
     max_print_private: int = 0
+    default_duration_minutes: int = 0
+    duration_multiple_minutes: int = 0
+    min_duration_minutes: int = 0
+    max_duration_minutes: int = 0
 
 
 class _TState(enum.StrEnum):
@@ -72,9 +71,13 @@ def main() -> None:
     # Update context.
     _Ctx.dev_mode = config.get("dev_mode", False)
     _Ctx.keep_timeboxes = config["keep_timeboxes"]
-    _Ctx.keep_duration = config["keep_duration"]
+    _Ctx.keep_duration_seconds = config["keep_duration_seconds"]
     _Ctx.max_print_channel = config["max_print_channel"]
     _Ctx.max_print_private = config["max_print_private"]
+    _Ctx.default_duration_minutes = config["default_duration_minutes"]
+    _Ctx.duration_multiple_minutes = config["duration_multiple_minutes"]
+    _Ctx.min_duration_minutes = config["min_duration_minutes"]
+    _Ctx.max_duration_minutes = config["max_duration_minutes"]
 
     # Ensure we can write to state file.
     _read_state(config["state"])
@@ -286,17 +289,24 @@ def _begin_command(  # noqa: PLR0911 (too-many-return-statements)
         duration = int(params[0])
         summary = " ".join(params[1:])
     else:
-        duration = _DEFAULT_DURATION
+        duration = _Ctx.default_duration_minutes
         summary = " ".join(params)
 
-    if duration < _MIN_DURATION:
-        return [f"Error: Duration must be at least {_MIN_DURATION} minutes."]
+    if duration < _Ctx.min_duration_minutes:
+        return [
+            f"Error: Duration must be at least {_Ctx.min_duration_minutes} minutes."
+        ]
 
-    if duration > _MAX_DURATION:
-        return [f"Error: Duration must not exceed {_MAX_DURATION}  minutes."]
+    if duration > _Ctx.max_duration_minutes:
+        return [
+            f"Error: Duration must not exceed {_Ctx.max_duration_minutes}  minutes."
+        ]
 
-    if duration % _DURATION_MULTIPLE != 0:
-        return [f"Error: Duration must be a multiple of {_DURATION_MULTIPLE} minutes."]
+    if duration % _Ctx.duration_multiple_minutes != 0:
+        return [
+            "Error: Duration must be a multiple of "
+            f"{_Ctx.duration_multiple_minutes} minutes."
+        ]
 
     audkey = "private" if private else audience
     timeboxes = _Ctx.state["timebox"].get(audkey, {}).get(person, [])
@@ -329,14 +339,21 @@ def _begin_command(  # noqa: PLR0911 (too-many-return-statements)
 
 
 def _begin_help(prefix: str, command: str) -> list[str]:
-    return [
+    msg = (
         f"Usage: {prefix}{command} [MINUTES] SUMMARY.  "
         f"Example #1: {prefix}{command} Read SICP.  "
         f"Example #2: {prefix}{command} 45 Review article.  "
         "Start a new timebox for the specified number of MINUTES.  "
-        "MINUTES must be a multiple of 5 between 15 and 60, inclusive.  "
-        "If MINUTES is not specified, default to 30 minutes."
-    ]
+        "MINUTES must be "
+    )
+    if _Ctx.duration_multiple_minutes > 1:
+        msg += f"a multiple of {_Ctx.duration_multiple_minutes}, "
+    msg += (
+        f"between {_Ctx.min_duration_minutes} and {_Ctx.max_duration_minutes}, "
+        "inclusive.  If MINUTES is not specified, default to "
+        f"{_Ctx.default_duration_minutes} minutes."
+    )
+    return [msg]
 
 
 # Command cancel
@@ -438,8 +455,8 @@ def _list_command(
 def _list_help(prefix: str, command: str) -> list[str]:
     return [
         f"Usage: {prefix}{command}.  List completed timeboxes in current channel.  "
-        f"Only most recent {_Ctx.keep_timeboxes} timeboxes started "
-        f"within the last {_format_duration(_Ctx.keep_duration)} are available.  "
+        f"Only most recent {_Ctx.keep_timeboxes} timeboxes started within the "
+        f"last {_format_duration(_Ctx.keep_duration_seconds)} are available.  "
         f"A maximum of {_Ctx.max_print_channel} timeboxes are listed in channel.  "
         f"A maximum of {_Ctx.max_print_private} timeboxes are listed in private."
     ]
@@ -476,8 +493,8 @@ def _mine_command(
 def _mine_help(prefix: str, command: str) -> list[str]:
     return [
         f"Usage: {prefix}{command}.  List your completed timeboxes.  "
-        f"Only your most recent {_Ctx.keep_timeboxes} timeboxes started "
-        f"within the last {_format_duration(_Ctx.keep_duration)} are available.  "
+        f"Only your most recent {_Ctx.keep_timeboxes} timeboxes started with the "
+        f"last {_format_duration(_Ctx.keep_duration_seconds)} are available.  "
         f"A maximum of {_Ctx.max_print_channel} timeboxes are listed in channel.  "
         f"A maximum of {_Ctx.max_print_private} timeboxes are listed in private."
     ]
@@ -655,7 +672,7 @@ def _clean_state() -> None:
             cleaned_timeboxes = [
                 timebox
                 for timebox in timeboxes
-                if current_time <= timebox["start"] + _Ctx.keep_duration
+                if current_time <= timebox["start"] + _Ctx.keep_duration_seconds
             ]
             cleaned_timeboxes = cleaned_timeboxes[-_Ctx.keep_timeboxes :]
             if len(cleaned_timeboxes) > 0:

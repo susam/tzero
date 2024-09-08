@@ -261,7 +261,7 @@ string.  The prefix-free form of the command is accepted too as
 `,help begin` are valid commands when the prefix is `,`.
 
 Further, the command name may be truncated to any positive length,
-i.e., `,help ,b`, `,help b`, `,help etc. are valid commands when the
+i.e., `,help ,b`, `,help b`, `,help` etc. are valid commands when the
 prefix is `,`.
 
 Examples:
@@ -347,9 +347,9 @@ configuration field in this file:
   per user per channel to retain in state.  Older timeboxes are
   permanently deleted from the state.
 
-- `keep_duration` (type `number`): Maximum duration for which recent
-  timeboxes are retained in state.  Older timeboxes are permanently
-  deleted from the state.
+- `keep_duration_seconds` (type `number`): Maximum duration (in
+  seconds) for which recent timeboxes are retained in state.  Older
+  timeboxes are permanently deleted from the state.
 
 - `max_print_channel` (type `number`): Maximum number of timeboxes to
   be listed in a channel in response to `list` or `mine` commands.
@@ -357,6 +357,20 @@ configuration field in this file:
 - `max_print_private` (type `number`): Maximum number of timeboxes to
   be listed in private message in response to `list` or `mine`
   commands.
+
+- `default_duration_minutes` (type `number`): Duration of a timebox
+  when no duration is specified in the `begin` command sent by the
+  user.
+
+- `duration_multiple_minutes` (type `number`): Duration specified in
+  the `begin` command must be a multiple of this number, otherwise the
+  `begin` command is rejected with an error.
+
+- `min_duration_minutes` (type `number`): Minimum allowed duration of
+  a timebox.
+
+- `max_duration_minutes` (type `number`): Maximum allowed duration of
+  a timebox.
 
 - `prefix` (type `str`): A prefix string that begins all Tzero
   commands.
